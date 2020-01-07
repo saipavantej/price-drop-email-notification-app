@@ -7,19 +7,23 @@ const args = process.argv.slice(2);
 console.log(args);
 const url = args[0];
 const minprice = parseFloat(args[1]);
-const amazon = /[₹,\s,\,]/g;
-const flipkart =/[₹,\,]/g;
+const amazon = /[₹,\s,\,]/g; // amazon.com price  "span#priceblock_ourprice.a-size-medium.a-color-price.priceBlockBuyingPriceString"
+const flipkart =/[₹,\,]/g;  //  flipkart.com price  "div._1vC4OE._3qQ9m1"
 checkPrice();
 async function checkPrice() {
     try {
         const priseString = await nightmare.goto(url)
-            .wait("div._1vC4OE._3qQ9m1")
-            .evaluate(() => document.querySelector("div._1vC4OE._3qQ9m1").innerText)
+            .wait("span#priceblock_ourprice.a-size-medium.a-color-price.priceBlockBuyingPriceString")
+            .evaluate(() => document.querySelector("span#priceblock_ourprice.a-size-medium.a-color-price.priceBlockBuyingPriceString").innerText)
             .end();
-        const priceNumber = parseFloat(priseString.replace(flipkart, ""));
+        const priceNumber = parseFloat(priseString.replace(amazon, ""));
         if (priceNumber < minprice) {
-            sendEmail("Product price drop", `The price of ${url} has dropped below ${minprice} \n current prise is ${priceNumber}`);
+            sendEmail("Product price drop", `The price of ${url} has dropped below ₹${minprice} current prise is ₹${priceNumber}`);
             console.log(`price drop message sent to ${process.env.MAIL_TO}`);
+        }
+        else
+        {
+            console.log(`price drop message not sent to ${process.env.MAIL_TO} \nno price drop \nproduct current price is (₹${priceNumber}) greater than (₹${minprice})`);
         }
     } catch (e) {
         sendEmail("price checker error ", e.message);
