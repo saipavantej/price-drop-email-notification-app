@@ -18,21 +18,31 @@ async function checkPrice() {
             .end();
         const priceNumber = parseFloat(priseString.replace(amazon, ""));
         if (priceNumber < minprice) {
-            sendEmail("Product price drop", `The price of ${url} has dropped below ₹${minprice} current prise is ₹${priceNumber}`);
-            console.log(`price drop message sent to ${process.env.MAIL_TO}`);
+            sendEmailTOCustomer("Product price drop", `The price of ${url} has dropped below ₹${minprice} current prise is ₹${priceNumber}`);
+            console.log(`price drop message sent to ${process.env.MAIL_TO_CUSTOMER}`);
         }
         else
         {
-            console.log(`price drop message not sent to ${process.env.MAIL_TO} \nno price drop \nproduct current price is (₹${priceNumber}) greater than (₹${minprice})`);
+            console.log(`price drop message not sent to ${process.env.MAIL_TO_CUSTOMER} \nno price drop \nproduct current price is (₹${priceNumber}) greater than (₹${minprice})`);
         }
     } catch (e) {
-        sendEmail("price checker error ", e.message);
+        sendEmailToDeveloper("price checker error ", e.message);
         console.log(`${e}`);
     }
 }
-function sendEmail(subject, body) {
+function sendEmailTOCustomer(subject, body) {
     const email = {
-        to: process.env.MAIL_TO,
+        to: process.env.MAIL_TO_CUSTOMER,
+        from: process.env.MAIL_FROM,
+        subject: subject,
+        text: body,
+        html: body
+    }
+    return sgMail.send(email);
+}
+function sendEmailToDeveloper(subject, body) {
+    const email = {
+        to: process.env.MAIL_TO_DEVELOPER,
         from: process.env.MAIL_FROM,
         subject: subject,
         text: body,
