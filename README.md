@@ -3,7 +3,7 @@
 To clone the repository on your computer 
 ```bash
 $ git clone https://github.com/saipavantej/price-drop-email-notification-app.git
-$ cd price-drop-email-notification-app.git
+$ cd price-drop-email-notification-app
 ```
 
 To install dependencies
