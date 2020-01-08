@@ -7,7 +7,7 @@ const args = process.argv.slice(2);
 console.log(args);
 const url = args[0];
 const minprice = parseFloat(args[1]);
-const amazon = /[₹,\s,\,]/g; // amazon.com price  "span#priceblock_ourprice.a-size-medium.a-color-price.priceBlockBuyingPriceString"
+const amazon = /[₹,\s,\,]/g; // amazon.in price  "span#priceblock_ourprice.a-size-medium.a-color-price.priceBlockBuyingPriceString"
 const flipkart =/[₹,\,]/g;  //  flipkart.com price  "div._1vC4OE._3qQ9m1"
 checkPrice();
 async function checkPrice() {
